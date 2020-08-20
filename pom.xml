@@ -6,7 +6,7 @@
 
     <groupId>com.github.scorchedpsyche.craftera_suite.entities.baby</groupId>
     <artifactId>craftera_suite-entities-baby</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>CraftEra Suite - Baby Entities</name>
