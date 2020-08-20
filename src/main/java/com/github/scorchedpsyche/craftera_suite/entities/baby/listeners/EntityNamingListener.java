@@ -1,5 +1,6 @@
 package com.github.scorchedpsyche.craftera_suite.entities.baby.listeners;
 
+import com.github.scorchedpsyche.craftera_suite.entities.baby.Main;
 import com.github.scorchedpsyche.craftera_suite.entities.baby.utils.EntityUtil;
 import net.minecraft.server.v1_16_R2.DataWatcher;
 import net.minecraft.server.v1_16_R2.ItemCooldown;
@@ -11,20 +12,23 @@ import org.bukkit.Particle;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftAgeable;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Breedable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDropItemEvent;
+import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.plugin.Plugin;
 
 import java.util.UUID;
 
 public class EntityNamingListener implements Listener {
     private final String Text_CraftEra_Suite = ChatColor.AQUA + "" + ChatColor.BOLD + "[CraftEra Suite] " +
                     ChatColor.RESET;
+    private Plugin plugin = Main.getPlugin(Main.class);
+
     /**
      * Listens to player right-click interaction and checks if the target entity is renamed to "ces_baby/adult".
      * TO DO
@@ -72,10 +76,11 @@ public class EntityNamingListener implements Listener {
 
                             if( ((Ageable) targetEntity).isAdult() ){
                                 // Successfully converted to Adult
-//                            sourcePlayer.sendRawMessage(
-//                                    Text_CraftEra_Suite + ChatColor.GREEN + targetEntity.getName() +
-//                                            ChatColor.RESET + " is now an adult!" );
 
+                                // Remove metadata
+                                targetEntity.removeMetadata("ces_baby/adult" , plugin);
+
+                                // Particles
                                 entityUtil.SpawnParticleAtEntity(
                                         targetEntity, Particle.DAMAGE_INDICATOR, 10, 0.0001);
                             } else {
@@ -104,7 +109,13 @@ public class EntityNamingListener implements Listener {
                         ((Ageable) targetEntity).setBaby();
 
                         if( !((Ageable) targetEntity).isAdult() ){
-                            // Conversion was successful
+                            // Successfully converted to Baby
+
+                            // Remove metadata
+                            targetEntity.setMetadata( "ces_baby/adult",
+                                                     new FixedMetadataValue ( plugin, "ces_baby/adult" ) );
+
+                            // Particles
                             entityUtil.SpawnParticleAtEntity(targetEntity, Particle.HEART, 15);
                         } else {
                             // Failed. Can't be a baby
@@ -146,6 +157,27 @@ public class EntityNamingListener implements Listener {
 
                     entityUtil.SpawnParticleAtEntity(
                             targetEntity, Particle.EXPLOSION_NORMAL,3, 0.01 );
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDropItemEvent(EntityDropItemEvent onEntityDropItem)
+    {
+        EntityUtil entityUtil = new EntityUtil();
+
+        // Check is entity is ageable and breedable
+        if( entityUtil.IsAgeableAndBreedable( onEntityDropItem.getEntity() ) )
+        {
+            // Check for plugin metadata
+            if( onEntityDropItem.getEntity().hasMetadata("ces_baby/adult") )
+            {
+                // Check if it's a turtle
+                if(onEntityDropItem.getEntity().getType() == EntityType.TURTLE)
+                {
+                    // Cancel Scute drop
+                    onEntityDropItem.setCancelled(true);
                 }
             }
         }
