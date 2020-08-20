@@ -20,6 +20,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 public class EntityNamingListener implements Listener {
     private final String Text_CraftEra_Suite = ChatColor.AQUA + "" + ChatColor.BOLD + "[CraftEra Suite] " +
                     ChatColor.RESET;
@@ -117,6 +119,7 @@ public class EntityNamingListener implements Listener {
                         }
                     }
 
+                    // Create packet to notify players of the conversion
                     DataWatcher watcher = ((CraftAgeable) targetEntity).getHandle().getDataWatcher();
                     PacketPlayOutEntityMetadata packet = new PacketPlayOutEntityMetadata(
                             targetEntity.getEntityId(), // Entity ID
@@ -124,15 +127,22 @@ public class EntityNamingListener implements Listener {
                             false // Send All
                     );
 
+                    // Notify nearby players
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                        // Check if in the same dimension
+                        if( targetEntity.getWorld().getUID() == player.getWorld().getUID() )
+                        {
+                            if( entityUtil.IsPlayerBetweenViewDistanceOfEntity(targetEntity, player) )
+                            {
+                                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                            }
+                        }
                     }
                 } else {
                     // Invalid entity for conversion
                     sourcePlayer.sendRawMessage(
                             Text_CraftEra_Suite + ChatColor.RED + targetEntity.getName() + ChatColor.RESET +
                                     " is not valid for conversion!" );
-
 
                     entityUtil.SpawnParticleAtEntity(
                             targetEntity, Particle.EXPLOSION_NORMAL,3, 0.01 );

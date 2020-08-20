@@ -12,6 +12,24 @@ import java.util.Random;
 
 public class EntityUtil
 {
+    public boolean IsPlayerBetweenViewDistanceOfEntity(Entity entity, Player player)
+    {
+        int entityChunkX = (int)(entity.getLocation().getX() / 16);
+        int entityChunkZ = (int)(entity.getLocation().getZ() / 16);
+
+        int playerChunkX = (int)(player.getLocation().getX() / 16);
+        int playerChunkZ = (int)(player.getLocation().getZ() / 16);
+
+        double distance = Math.hypot(entityChunkX - playerChunkX,
+                                     entityChunkZ - playerChunkZ);
+
+        if(distance <= Bukkit.getViewDistance())
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     public boolean PlayerHoldsValidNameTag(ItemStack item)
     {
