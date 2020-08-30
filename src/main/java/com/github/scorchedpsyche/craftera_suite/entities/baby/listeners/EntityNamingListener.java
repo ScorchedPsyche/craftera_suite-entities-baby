@@ -1,33 +1,28 @@
 package com.github.scorchedpsyche.craftera_suite.entities.baby.listeners;
 
-import com.github.scorchedpsyche.craftera_suite.entities.baby.Main;
+import com.github.scorchedpsyche.craftera_suite.entities.baby.CraftEraSuiteBabyEntities;
 import com.github.scorchedpsyche.craftera_suite.entities.baby.utils.EntityUtil;
 import net.minecraft.server.v1_16_R2.DataWatcher;
-import net.minecraft.server.v1_16_R2.ItemCooldown;
 import net.minecraft.server.v1_16_R2.PacketPlayOutEntityMetadata;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftAgeable;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDropItemEvent;
-import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import java.util.UUID;
-
 public class EntityNamingListener implements Listener {
     private final String Text_CraftEra_Suite = ChatColor.AQUA + "" + ChatColor.BOLD + "[CraftEra Suite] " +
                     ChatColor.RESET;
-    private Plugin plugin = Main.getPlugin(Main.class);
+    private Plugin plugin = CraftEraSuiteBabyEntities.getPlugin(CraftEraSuiteBabyEntities.class);
 
     /**
      * Listens to player right-click interaction and checks if the target entity is renamed to "ces_baby/adult".

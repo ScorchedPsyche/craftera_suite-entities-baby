@@ -4,7 +4,7 @@ import com.github.scorchedpsyche.craftera_suite.entities.baby.listeners.EntityNa
 import com.github.scorchedpsyche.craftera_suite.entities.baby.listeners.TestListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Main extends JavaPlugin {
+public final class CraftEraSuiteBabyEntities extends JavaPlugin {
 
     // Plugin startup logic
     @Override
