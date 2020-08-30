@@ -1,7 +1,6 @@
 package com.github.scorchedpsyche.craftera_suite.entities.baby;
 
 import com.github.scorchedpsyche.craftera_suite.entities.baby.listeners.EntityNamingListener;
-import com.github.scorchedpsyche.craftera_suite.entities.baby.listeners.TestListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CraftEraSuiteBabyEntities extends JavaPlugin {
